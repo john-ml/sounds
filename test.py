@@ -72,6 +72,7 @@ def repeat(reps, fragment):
       thread.join()
   return lambda seconds: Thread(target = lambda: do_repeat(seconds))
 
+# https://www.youtube.com/watch?v=vDKxtb510NQ
 par(
   # Soprano
   seq(
