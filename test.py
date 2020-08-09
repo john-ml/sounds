@@ -1,6 +1,6 @@
 def pure_tone(seconds, frequency):
   from os import system
-  system(f'timeout -s SIGKILL {seconds} speaker-test --frequency {frequency} --test sine > /dev/null 2> /dev/null')
+  system(f'timeout -s SIGKILL {seconds} speaker-test --frequency {frequency} --test sine --device default --channels 1 > /dev/null 2> /dev/null')
 
 # Equal temperament with A4 = 440
 def hz(name, octave):
@@ -133,3 +133,5 @@ par(
     seq(seq(note('G#', 4), seq(note('F#', 4), note('E', 4))), note('A', 4)),
   ),
 )(45).start()
+
+
