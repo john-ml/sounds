@@ -15,7 +15,6 @@
 
 ; (metronome (make-pstream) o-hi-hat 120 0)
 
-; Some subset of a full measure of 16th notes
 (define (rhythmic-pattern pstream rsound gap pattern)
   (define step-size 10) ; queue 100 beats at a time
   (define (go frames beats beat)
@@ -31,7 +30,10 @@
    (= (modulo n 2) 1)
    (and (< n 20) (= (modulo n 1) 0))))
 
-(define (random-rhythm n) (zero? (random 2)))
+(define (random-rhythm n)
+  (define weight (+ 1 (round (/ (modulo n 100) 16))))
+  (println weight)
+  (not (zero? (random weight))))
 
 (define (random-pattern)
   (define b0 (zero? (random 2)))
@@ -69,6 +71,6 @@
       [14 be]
       [15 bf])))
 
-(rhythmic-pattern (make-pstream) o-hi-hat (/ frame-rate 4) (random-pattern))
+(rhythmic-pattern (make-pstream) o-hi-hat (round (/ frame-rate 8)) random-rhythm)
 
 (letrec ([loop (λ () (sleep 1000000) (loop))]) (loop))
