@@ -69,6 +69,6 @@
       [14 be]
       [15 bf])))
 
-(rhythmic-pattern (make-pstream) o-hi-hat (/ frame-rate 4) (random-pattern))
+(rhythmic-pattern (make-pstream) o-hi-hat (/ frame-rate 8) (random-pattern))
 
 (letrec ([loop (λ () (sleep 1000000) (loop))]) (loop))
