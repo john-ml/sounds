@@ -8,6 +8,12 @@
 ; s-at : nat a -> stream a
 (define (s-at n x) (λ (m) (if (= n m) x null)))
 
+; s-every : nat a -> stream a
+(define (s-every n x) (λ (m) (if (zero? (modulo m n)) x null)))
+
+; s-dilate : nat (stream a) -> stream a
+(define (s-dilate n s) (λ (m) (if (zero? (modulo m n)) (s (floor (/ m n))) null)))
+
 ; s-map : (a -> b) (stream a) -> stream b
 (define (s-map f s)
   (λ (n)
@@ -57,14 +63,19 @@
   (define gap (/ (* 60 frame-rate) bpm))
   (define (go n)
     (define sn (s n))
+    (define frames (round (* gap n)))
     (unless (null? sn)
-      (define frames (* gap n))
-      (map (λ (rsound) (pstream-queue p rsound frames)) sn)
-      (pstream-queue-callback p (λ () (go (+ n 1))) frames)))
+      (map (λ (rsound) (pstream-queue p rsound frames)) sn))
+    (pstream-queue-callback p (λ () (go (+ n 1))) frames))
   (go 0))
 
 ; -> void
 (define (wait) (letrec ([loop (λ () (sleep 1000000) (loop))]) (loop)))
 
-(s-play 168 (s-const (list o-hi-hat)))
+(s-play 672
+        (s-lift
+         (λ ss (filter (λ (s) (not (null? s))) ss))
+         (s-every 4 bassdrum)
+         (s-dilate 16 (s-rand crash-cymbal))
+         (s-rand o-hi-hat)))
 (wait)
